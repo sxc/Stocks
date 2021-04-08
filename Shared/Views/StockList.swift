@@ -11,7 +11,7 @@ struct StockList: View {
     var body: some View {
         NavigationView {
                     List {
-                        StockListRow(stockData: sampleData)
+                        StockListRow(downloadManager: DownloadManager())
                     }
                         .navigationTitle("Stocks")
                 }
@@ -26,11 +26,13 @@ struct StockList_Previews: PreviewProvider {
 
 struct StockListRow: View {
     
-    let stockData: [DataEntry]
+//    let stockData: [DataEntry]
+    
+    @ObservedObject var downloadManager: DownloadManager
     
     var body: some View {
         HStack {
-            NavigationLink(destination: ContentView(stockData: stockData)) {
+            NavigationLink(destination: ContentView(downloadManager: downloadManager)) {
                 VStack(alignment: .leading) {
                     Text("AAPL")
                         .font(.custom("Avenir", size: 20))
@@ -46,7 +48,7 @@ struct StockListRow: View {
                                .fontWeight(.medium)
                                .foregroundColor(.green)
                     
-                    Text("$" + String(format: "%.2f", stockData.last?.close ?? 0))
+                        Text("$" + String(format: "%.2f", downloadManager.dataEntries.last?.close ?? 0))
                         .font(.custom("Avenir", size: 26))
                     
                     

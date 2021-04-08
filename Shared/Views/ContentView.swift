@@ -9,12 +9,15 @@ import SwiftUI
 
 struct ContentView: View {
     
-    let stockData: [DataEntry]
+//    let stockData: [DataEntry]
+    
+    @ObservedObject var downloadManager: DownloadManager
+    
     
     var body: some View {
         VStack {
-            Header(stockData: stockData)
-            Chart(dataSet: stockData)
+            Header(stockData: downloadManager.dataEntries)
+            Chart(dataSet: downloadManager.dataEntries)
                 .frame(height: 300)
             Spacer()
             TransactionButtons()
@@ -26,7 +29,7 @@ struct ContentView: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView(stockData: sampleData)
+        ContentView(downloadManager: DownloadManager())
     }
 }
 

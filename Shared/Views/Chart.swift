@@ -12,14 +12,16 @@ struct Chart: View {
     let dataSet: [DataEntry]
     
     var body: some View {
-        ZStack {
-            Grid()
-                .stroke(lineWidth: 0.2)
-            Graph(dataSet: dataSet)
-                .stroke(lineWidth: 0.2)
-            GraphGradient(dataSet: dataSet)
-                .fill(LinearGradient(gradient: bullishBearishGradient(lastClose: dataSet.last?.close ?? 0, firstClose: dataSet.first?.close ?? 0), startPoint: .top, endPoint: .bottom))
-            PriceLegend(dataSet: dataSet)
+        ZStack(alignment: .trailing) {
+            if !dataSet.isEmpty {
+                Grid()
+                    .stroke(lineWidth: 0.2)
+                Graph(dataSet: dataSet)
+                    .stroke(lineWidth: 0.2)
+                GraphGradient(dataSet: dataSet)
+                    .fill(LinearGradient(gradient: bullishBearishGradient(lastClose: dataSet.last?.close ?? 0, firstClose: dataSet.first?.close ?? 0), startPoint: .top, endPoint: .bottom))
+                PriceLegend(dataSet: dataSet)
+            }
         }
     }
 }

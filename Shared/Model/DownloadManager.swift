@@ -16,4 +16,5 @@ class DownloadManager: ObservableObject {
     @Published var dataFetched = false
     
     
+    
 }
