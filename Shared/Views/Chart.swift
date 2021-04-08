@@ -18,6 +18,7 @@ struct Chart: View {
             Graph(dataSet: dataSet)
                 .stroke(lineWidth: 0.2)
             GraphGradient(dataSet: dataSet)
+                .fill(LinearGradient(gradient: bullishBearishGradient(lastClose: dataSet.last?.close ?? 0, firstClose: dataSet.first?.close ?? 0), startPoint: .top, endPoint: .bottom))
             PriceLegend(dataSet: dataSet)
         }
     }
