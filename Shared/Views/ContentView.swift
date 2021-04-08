@@ -8,9 +8,12 @@
 import SwiftUI
 
 struct ContentView: View {
+    
+    let stockData: [DataEntry]
+    
     var body: some View {
         VStack {
-            Header()
+            Header(stockData: stockData)
             Chart()
                 .frame(height: 300)
             Spacer()
@@ -23,16 +26,21 @@ struct ContentView: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView()
+        ContentView(stockData: sampleData)
     }
 }
 
 struct Header: View {
+    
+    let stockData: [DataEntry]
+    
     var body: some View {
         HStack(alignment: .bottom) {
-            Text("$" + String(format: "%.2f", 32.2832))
+            Text("$" + String(format: "%.2f", stockData.last?.close ?? 0))
                 .font(.custom("Avenir", size: 45))
-            Text(String(format: "%.2f", 0.234) + "%")
+            Text(String(format: "%.2f", 86.63) + "%")
+//            Text(String(format: "%.2f", getPercentageChange(stockData: stockData)) + "%")
+                
                 .font(.custom("Avenir", size: 18))
                 .fontWeight(.medium)
                 .foregroundColor(.green)
