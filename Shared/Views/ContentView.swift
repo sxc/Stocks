@@ -11,7 +11,7 @@ struct ContentView: View {
     var body: some View {
         VStack {
             Header()
-            Rectangle()
+            Chart()
                 .frame(height: 300)
             Spacer()
             TransactionButtons()
