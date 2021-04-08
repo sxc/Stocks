@@ -8,10 +8,18 @@
 import SwiftUI
 
 struct Chart: View {
+    
+    let dataSet: [DataEntry]
+    
     var body: some View {
-
-        Grid()
-                  .stroke(lineWidth: 0.2)
+        ZStack {
+            Grid()
+                .stroke(lineWidth: 0.2)
+            Graph(dataSet: dataSet)
+                .stroke(lineWidth: 0.2)
+            GraphGradient(dataSet: dataSet)
+            PriceLegend(dataSet: dataSet)
+        }
     }
 }
 
@@ -59,8 +67,108 @@ struct Grid: Shape {
     }
 }
 
+struct Graph: Shape {
+    
+    let dataSet: [DataEntry]
+    
+    func path(in rect: CGRect) -> Path {
+        
+        var path = Path()
+        
+        let max = dataSet.map { $0.close }.max()
+        let min = dataSet.map { $0.close }.min()
+        
+        let startingPoint = CGPoint(x: 0, y: (1-(CGFloat(dataSet[0].close-(min ?? 0)))/(CGFloat((max ?? 0) - (min ?? 0))))*rect.size.height)
+        
+        path.move(to: startingPoint)
+        
+        for (index, entry) in dataSet.enumerated() {
+            let xValue = rect.size.width*CGFloat(Double(index)/Double(dataSet.count-1))
+            let yValue = (1-(CGFloat(entry.close-(min ?? 0)))/(CGFloat((max ?? 0) - (min ?? 0))))*rect.size.height
+            
+            path.addLine(to: CGPoint(x: xValue, y: yValue))
+            
+        }
+        
+        return path
+    }
+}
+
+struct GraphGradient: Shape {
+    
+    let dataSet: [DataEntry]
+    
+    func path(in rect: CGRect) -> Path {
+        
+        var path = Path()
+        
+        let max = dataSet.map { $0.close }.max()
+        let min = dataSet.map { $0.close }.min()
+        
+        let startingPoint = CGPoint(x: 0, y: (1-(CGFloat(dataSet[0].close-(min ?? 0)))/(CGFloat((max ?? 0) - (min ?? 0))))*rect.size.height)
+        
+        path.move(to: startingPoint)
+        
+        for (index, entry) in dataSet.enumerated() {
+            let xValue = rect.size.width*CGFloat(Double(index)/Double(dataSet.count-1))
+            let yValue = (1-(CGFloat(entry.close-(min ?? 0)))/(CGFloat((max ?? 0) - (min ?? 0))))*rect.size.height
+            
+            path.addLine(to: CGPoint(x: xValue, y: yValue))
+            
+        }
+        
+        path.addLine(to: CGPoint(x: rect.size.width, y: rect.size.height))
+            path.addLine(to: CGPoint(x: 0, y: rect.size.height))
+            path.closeSubpath()
+        
+        return path
+    }
+}
+
+
+
+
+struct PriceLegend: View {
+    
+    let dataSet: [DataEntry]
+    let min: Double
+    let max: Double
+    
+    init(dataSet: [DataEntry]) {
+        self.dataSet = dataSet
+        min = dataSet.map { $0.close }.min() ?? 0
+        max = dataSet.map { $0.close }.max() ?? 0
+    }
+    
+    var body: some View {
+            VStack {
+                Spacer()
+                Text(String(format: "%.2f", (max-min)*0.75+min))
+                    .font(.custom("Avenir", size: 14))
+                    .foregroundColor(.gray)
+                Spacer()
+                Text(String(format: "%.2f", (max-min)*0.5+min))
+                    .font(.custom("Avenir", size: 14))
+                    .foregroundColor(.gray)
+                Spacer()
+                Text(String(format: "%.2f", (max-min)*0.25+min))
+                    .font(.custom("Avenir", size: 14))
+                    .foregroundColor(.gray)
+                Spacer()
+                Text(String(format: "%.2f", min))
+                    .font(.custom("Avenir", size: 14))
+                    .foregroundColor(.gray)
+            }
+        }
+}
+
+
+
+
+
 struct Chart_Previews: PreviewProvider {
     static var previews: some View {
-        Chart()
+        Chart(dataSet: sampleData)
+            .frame(height: 300)
     }
 }
