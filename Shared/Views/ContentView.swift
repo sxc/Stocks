@@ -9,7 +9,6 @@ import SwiftUI
 
 struct ContentView: View {
     var body: some View {
-       
         VStack {
             Header()
             Rectangle()
@@ -17,10 +16,8 @@ struct ContentView: View {
             Spacer()
             TransactionButtons()
             Spacer()
-            
         }
-            
-            
+        .navigationTitle("Stocks")
     }
 }
 
